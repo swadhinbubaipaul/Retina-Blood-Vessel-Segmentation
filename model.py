@@ -6,10 +6,8 @@ import torch.nn as nn
 def double_conv(input_ch, output_ch):
         conv = nn.Sequential(
         nn.Conv2d(input_ch, output_ch, kernel_size=3),
-        nn.BatchNorm2d(output_ch),
         nn.ReLU(inplace=True),
         nn.Conv2d(output_ch, output_ch, kernel_size=3),
-        nn.BatchNorm2d(output_ch),
         nn.ReLU(inplace=True))
         return conv
 
@@ -24,7 +22,7 @@ class UNet(nn.Module):
     def __init__(self):
         super(UNet, self).__init__()
         self.max_pool_2x2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.down_conv1 = double_conv(1,64)
+        self.down_conv1 = double_conv(3,64)
         self.down_conv2 = double_conv(64,128)
         self.down_conv3 = double_conv(128,256)
         self.down_conv4 = double_conv(256,512)
