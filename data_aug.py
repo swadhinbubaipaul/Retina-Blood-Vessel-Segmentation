@@ -21,7 +21,7 @@ def load_data(path):
     return (train_x, train_y), (test_x, test_y)
 
 def augment_data(images, masks, save_path, augment=True):
-    size = (572, 572)
+    size = (512, 512)
 
     for idx, (x, y) in tqdm(enumerate(zip(images, masks)), total=len(images)):
         
