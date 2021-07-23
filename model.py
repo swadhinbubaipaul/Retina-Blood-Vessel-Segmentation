@@ -72,7 +72,7 @@ class UNet(nn.Module):
         x = self.up_conv4(torch.cat([x, y], 1))
         
         x = self.out(x)
-        # print(x.size())
+        #print(x.size())
         return x
 
 if __name__ == "__main__":
