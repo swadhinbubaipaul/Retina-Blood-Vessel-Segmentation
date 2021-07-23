@@ -63,8 +63,8 @@ if __name__ == "__main__":
     print(data_str)
 
     """ Hyperparameters """
-    H = 572
-    W = 572
+    H = 512
+    W = 512
     size = (H, W)
     batch_size = 2
     num_epochs = 50
