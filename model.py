@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-class double_conv(nn.Module):
+class conv_block(nn.Module):
     def __init__(self, in_c, out_c):
         super().__init__()
 
@@ -28,7 +28,7 @@ class encoder_block(nn.Module):
     def __init__(self, in_c, out_c):
         super().__init__()
 
-        self.conv = double_conv(in_c, out_c)
+        self.conv = conv_block(in_c, out_c)
         self.pool = nn.MaxPool2d((2, 2))
 
     def forward(self, inputs):
@@ -42,7 +42,7 @@ class decoder_block(nn.Module):
         super().__init__()
 
         self.up = nn.ConvTranspose2d(in_c, out_c, kernel_size=2, stride=2, padding=0)
-        self.conv = double_conv(out_c+out_c, out_c)
+        self.conv = conv_block(out_c+out_c, out_c)
 
     def forward(self, inputs, skip):
         x = self.up(inputs)
@@ -50,7 +50,7 @@ class decoder_block(nn.Module):
         x = self.conv(x)
         return x
 
-class UNet(nn.Module):
+class build_unet(nn.Module):
     def __init__(self):
         super().__init__()
 
@@ -61,7 +61,7 @@ class UNet(nn.Module):
         self.e4 = encoder_block(256, 512)
 
         """ Bottleneck """
-        self.b = double_conv(512, 1024)
+        self.b = conv_block(512, 1024)
 
         """ Decoder """
         self.d1 = decoder_block(1024, 512)
@@ -94,6 +94,6 @@ class UNet(nn.Module):
 
 if __name__ == "__main__":
     x = torch.randn((2, 3, 512, 512))
-    f = UNet()
+    f = build_unet()
     y = f(x)
     print(y.shape)
