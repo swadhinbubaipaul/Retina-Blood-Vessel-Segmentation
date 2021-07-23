@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 import torch.nn as nn
 
 from data import DriveDataset
-from model import UNet
+from model import build_unet
 from loss import DiceLoss, DiceBCELoss
 from utils import seeding, create_dir, epoch_time
 
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     )
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = UNet()
+    model = build_unet()
     model = model.to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
