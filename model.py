@@ -6,8 +6,10 @@ import torch.nn as nn
 def double_conv(input_ch, output_ch):
         conv = nn.Sequential(
         nn.Conv2d(input_ch, output_ch, kernel_size=3),
+        nn.BatchNorm2d(output_ch),
         nn.ReLU(inplace=True),
         nn.Conv2d(output_ch, output_ch, kernel_size=3),
+        nn.BatchNorm2d(output_ch),
         nn.ReLU(inplace=True))
         return conv
 
