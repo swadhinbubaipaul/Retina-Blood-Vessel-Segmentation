@@ -114,7 +114,7 @@ if __name__ == "__main__":
         cat_images = np.concatenate(
             [image, line, ori_mask, line, pred_y * 255], axis=1
         )
-        cv2.imwrite(f"results/{name}.png", cat_images)
+        cv2.imwrite(f"/content/drive/MyDrive/Program/results/{name}.png", cat_images)
 
     jaccard = metrics_score[0]/len(test_x)
     f1 = metrics_score[1]/len(test_x)
