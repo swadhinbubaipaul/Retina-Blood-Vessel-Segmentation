@@ -50,8 +50,8 @@ if __name__ == "__main__":
     test_y = sorted(glob("/content/drive/MyDrive/Program/new_data/test/mask/*"))
 
     """ Hyperparameters """
-    H = 572
-    W = 572
+    H = 512
+    W = 512
     size = (W, H)
     checkpoint_path = "/content/drive/MyDrive/Program/files/checkpoint.pth"
 
