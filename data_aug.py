@@ -4,7 +4,7 @@ import cv2
 from glob import glob
 from tqdm import tqdm
 import imageio
-from albumentations import HorizontalFlip, VerticalFlip, Rotate
+from albumentations import HorizontalFlip, VerticalFlip, Rotate, GridDistortion, OpticalDistortion, ElasticTransform
 
 
 def create_dir(path):
@@ -42,13 +42,29 @@ def augment_data(images, masks, save_path, augment=True):
             x2 = augmented["image"]
             y2 = augmented["mask"]
 
-            aug = Rotate(limit=45, p=1.0, border_mode=cv2.BORDER_CONSTANT)
+            aug = Rotate(limit=45, p=1.0)
             augmented = aug(image=x, mask=y)
             x3 = augmented["image"]
             y3 = augmented["mask"]
+            
+            aug = GridDistortion(p=1)
+            augmented = aug(image=x, mask=y)
+            x4 = augmented["image"]
+            y4 = augmented["mask"]
+            
+            aug = OpticalDistortion(p=1, distort_limit=2, shift_limit=0.5)
+            augmented = aug(image=x, mask=y)
+            x5 = augmented["image"]
+            y5 = augmented["mask"]
+              
+            aug = ElasticTransform(p=1, alpha=120, sigma=120 * 0.05, alpha_affine=120 * 0.03)
+            augmented = aug(image=x, mask=y)
+            x6 = augmented["image"]
+            y6 = augmented["mask"]
 
-            X = [x, x1, x2, x3]
-            Y = [y, y1, y2, y3]
+
+            X = [x, x1, x2, x3, x4, x5, x6]  
+            Y = [y, y1, y2, y3, y4, y5, y6]
 
         else:
             X = [x]
