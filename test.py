@@ -121,7 +121,7 @@ if __name__ == "__main__":
     recall = metrics_score[2]/len(test_x)
     precision = metrics_score[3]/len(test_x)
     acc = metrics_score[4]/len(test_x)
-    print(f"Jaccard: {jaccard:1.4f} - F1: {f1:1.4f} - Recall: {recall:1.4f} - Precision: {precision:1.4f} - Acc: {acc:1.4f}")
+    print(f"Jaccard: {jaccard:1.4f} \n F1: {f1:1.4f} \n Recall: {recall:1.4f} \n Precision: {precision:1.4f} \n Acc: {acc:1.4f}")
 
     fps = 1/np.mean(time_taken)
     print("FPS: ", fps)
