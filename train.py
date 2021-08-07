@@ -2,6 +2,7 @@ import os
 import time
 from glob import glob
 from operator import add
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
