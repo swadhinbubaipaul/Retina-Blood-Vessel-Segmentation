@@ -1,7 +1,7 @@
 import os
 import time
 from glob import glob
-
+from operator import add
 import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
@@ -10,10 +10,32 @@ from data import DriveDataset
 from model import build_unet
 from loss import DiceLoss, DiceBCELoss
 from utils import seeding, create_dir, epoch_time
+from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
+
+def calculate_metrics(y_true, y_pred):
+    """ Ground truth """
+    y_true = y_true.cpu().numpy()
+    y_true = y_true > 0.5
+    y_true = y_true.astype(np.uint8)
+    y_true = y_true.reshape(-1)
+
+    """ Prediction """
+    y_pred = y_pred.cpu().numpy()
+    y_pred = y_pred > 0.5
+    y_pred = y_pred.astype(np.uint8)
+    y_pred = y_pred.reshape(-1)
+
+    score_jaccard = jaccard_score(y_true, y_pred)
+    score_f1 = f1_score(y_true, y_pred)
+    score_recall = recall_score(y_true, y_pred)
+    score_precision = precision_score(y_true, y_pred)
+    score_acc = accuracy_score(y_true, y_pred)
+
+    return [score_jaccard, score_f1, score_recall, score_precision, score_acc]
 
 def train(model, loader, optimizer, loss_fn, device):
     epoch_loss = 0.0
-
+    
     model.train()
     for x, y in loader:
         x = x.to(device, dtype=torch.float32)
@@ -25,13 +47,13 @@ def train(model, loader, optimizer, loss_fn, device):
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
-
+    
     epoch_loss = epoch_loss/len(loader)
     return epoch_loss
 
 def evaluate(model, loader, loss_fn, device):
     epoch_loss = 0.0
-
+    metrics_score = [0.0, 0.0, 0.0, 0.0, 0.0]
     model.eval()
     with torch.no_grad():
         for x, y in loader:
@@ -41,9 +63,10 @@ def evaluate(model, loader, loss_fn, device):
             y_pred = model(x)
             loss = loss_fn(y_pred, y)
             epoch_loss += loss.item()
-
+            score = calculate_metrics(y, y_pred)
+            metrics_score = list(map(add, metrics_score, score))
         epoch_loss = epoch_loss/len(loader)
-    return epoch_loss
+    return epoch_loss, metrics_score
 
 if __name__ == "__main__":
     """ Seeding """
@@ -104,7 +127,7 @@ if __name__ == "__main__":
         start_time = time.time()
 
         train_loss = train(model, train_loader, optimizer, loss_fn, device)
-        valid_loss = evaluate(model, valid_loader, loss_fn, device)
+        valid_loss, metrics_score = evaluate(model, valid_loader, loss_fn, device)
 
         """ Saving the model """
         if valid_loss < best_valid_loss:
@@ -121,3 +144,10 @@ if __name__ == "__main__":
         data_str += f'\tTrain Loss: {train_loss:.3f}\n'
         data_str += f'\t Val. Loss: {valid_loss:.3f}\n'
         print(data_str)
+
+        jaccard = metrics_score[0]/len(valid_x)
+        f1 = metrics_score[1]/len(valid_x)
+        recall = metrics_score[2]/len(valid_x)
+        precision = metrics_score[3]/len(valid_x)
+        acc = metrics_score[4]/len(valid_x)
+        print(f"Jaccard: {jaccard:1.4f} \nF1: {f1:1.4f} \nRecall: {recall:1.4f} \nPrecision: {precision:1.4f} \nAcc: {acc:1.4f}")
