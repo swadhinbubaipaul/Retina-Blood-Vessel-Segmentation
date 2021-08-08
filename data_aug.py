@@ -52,7 +52,7 @@ def augment_data(images, masks, save_path, augment=True):
             x4 = augmented["image"]
             y4 = augmented["mask"]
             
-            aug = OpticalDistortion(p=1, distort_limit=2, shift_limit=0.5)
+            aug = OpticalDistortion(p=1, distort_limit=2, shift_limit=0.5, border_mode=cv2.BORDER_CONSTANT)
             augmented = aug(image=x, mask=y)
             x5 = augmented["image"]
             y5 = augmented["mask"]
