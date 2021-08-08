@@ -65,7 +65,7 @@ def train(model, loader, optimizer, loss_fn, device):
 
 def evaluate(model, loader, loss_fn, device):
     epoch_loss = 0.0
-    metrics_score = [0.0, 0.0, 0.0, 0.0, 0.0]
+    metrics_score = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     model.eval()
     with torch.no_grad():
         for x, y in loader:
