@@ -42,7 +42,7 @@ def augment_data(images, masks, save_path, augment=True):
             x2 = augmented["image"]
             y2 = augmented["mask"]
 
-            aug = Rotate(limit=45, p=1.0)
+            aug = Rotate(limit=45, p=1.0, border_mode=cv2.BORDER_CONSTANT)
             augmented = aug(image=x, mask=y)
             x3 = augmented["image"]
             y3 = augmented["mask"]
