@@ -152,4 +152,4 @@ if __name__ == "__main__":
         recall = metrics_score[2]
         precision = metrics_score[3]
         acc = metrics_score[4]
-        print(f"Jaccard: {jaccard:1.4f} \n\tF1: {f1:1.4f} \n\tRecall: {recall:1.4f} \n\tPrecision: {precision:1.4f} \n\tAcc: {acc:1.4f}\n")
+        print(f"\tJaccard: {jaccard:1.4f} \n\tF1: {f1:1.4f} \n\tRecall: {recall:1.4f} \n\tPrecision: {precision:1.4f} \n\tAcc: {acc:1.4f}\n")
