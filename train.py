@@ -1,7 +1,7 @@
 import os
 import time
 from glob import glob
-from operator import add
+from operator import add, sub
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
@@ -67,7 +67,7 @@ def evaluate(model, loader, loss_fn, device):
             score = calculate_metrics(y, y_pred)
             metrics_score = list(map(add, metrics_score, score))
         epoch_loss = epoch_loss/len(loader)
-        metrics_score = metrics_score/len(loader)
+        metrics_score = list(map(sub, metrics_score, len(loader)))
     return epoch_loss, metrics_score
 
 if __name__ == "__main__":
