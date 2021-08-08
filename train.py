@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
         data_str = f'Epoch: {epoch+1:02} | Epoch Time: {epoch_mins}m {epoch_secs}s\n'
         data_str += f'\tTrain Loss: {train_loss:.3f}\n'
-        data_str += f'\t Val. Loss: {valid_loss:.3f}\n'
+        data_str += f'\tVal. Loss: {valid_loss:.3f}'
         print(data_str)
 
         jaccard = metrics_score[0]
@@ -152,4 +152,4 @@ if __name__ == "__main__":
         recall = metrics_score[2]
         precision = metrics_score[3]
         acc = metrics_score[4]
-        print(f"Jaccard: {jaccard:1.4f} \nF1: {f1:1.4f} \nRecall: {recall:1.4f} \nPrecision: {precision:1.4f} \nAcc: {acc:1.4f}")
+        print(f"Jaccard: {jaccard:1.4f} \n\tF1: {f1:1.4f} \n\tRecall: {recall:1.4f} \n\tPrecision: {precision:1.4f} \n\tAcc: {acc:1.4f}\n")
