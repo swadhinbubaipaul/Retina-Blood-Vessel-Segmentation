@@ -173,6 +173,6 @@ if __name__ == "__main__":
         sensitivity = metrics_score[2]
         precision = metrics_score[3]
         jaccard = metrics_score[4]
-        f1 = metrics_score
+        f1 = metrics_score[5]
         print(f"\tAccuracy: {accuracy:1.4f} \n\tSpecificity: {specificity:1.4f} \n\tSensitivity: {sensitivity:1.4f} \n\tPrecision: {precision:1.4f} \n\tJaccard: {jaccard:1.4f}\n\tF1: {f1:1.4f}\n")
 #accuracy, specificity, sensitivity,precision, jaccard_index, F1_score
