@@ -11,9 +11,7 @@ from data import DriveDataset
 from model import build_unet
 from loss import DiceLoss, DiceBCELoss
 from utils import seeding, create_dir, epoch_time
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import jaccard_similarity_score
-from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
 
 def calculate_metrics(y_true, y_pred):
     """ Ground truth """
@@ -27,33 +25,14 @@ def calculate_metrics(y_true, y_pred):
     y_pred = y_pred > 0.5
     y_pred = y_pred.astype(np.uint8)
     y_pred = y_pred.reshape(-1)
-    #Confusion matrix
-    confusion = confusion_matrix(y_true, y_pred)
-    
-    accuracy = 0
-    if float(np.sum(confusion))!=0:
-        accuracy = float(confusion[0,0]+confusion[1,1])/float(np.sum(confusion))
-    specificity = 0
-    if float(confusion[0,0]+confusion[0,1])!=0:
-        specificity = float(confusion[0,0])/float(confusion[0,0]+confusion[0,1])
-    
-    sensitivity = 0
-    if float(confusion[1,1]+confusion[1,0])!=0:
-        sensitivity = float(confusion[1,1])/float(confusion[1,1]+confusion[1,0])
-    
-    precision = 0
-    if float(confusion[1,1]+confusion[0,1])!=0:
-        precision = float(confusion[1,1])/float(confusion[1,1]+confusion[0,1])
-    
 
-    #Jaccard similarity index
-    jaccard_index = jaccard_similarity_score(y_true, y_pred, normalize=True)
-    
+    score_jaccard = jaccard_score(y_true, y_pred)
+    score_f1 = f1_score(y_true, y_pred)
+    score_recall = recall_score(y_true, y_pred)
+    score_precision = precision_score(y_true, y_pred)
+    score_acc = accuracy_score(y_true, y_pred)
 
-    #F1 score
-    F1_score = f1_score(y_true, y_pred, labels=None, average='binary', sample_weight=None)
-    
-    return [accuracy, specificity, sensitivity,precision, jaccard_index, F1_score]
+    return [score_jaccard, score_f1, score_recall, score_precision, score_acc]
 
 def train(model, loader, optimizer, loss_fn, device):
     epoch_loss = 0.0
@@ -75,7 +54,7 @@ def train(model, loader, optimizer, loss_fn, device):
 
 def evaluate(model, loader, loss_fn, device):
     epoch_loss = 0.0
-    metrics_score = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    metrics_score = [0.0, 0.0, 0.0, 0.0, 0.0]
     model.eval()
     with torch.no_grad():
         for x, y in loader:
@@ -168,11 +147,9 @@ if __name__ == "__main__":
         data_str += f'\tVal. Loss: {valid_loss:.3f}'
         print(data_str)
 
-        accuracy = metrics_score[0]
-        specificity = metrics_score[1]
-        sensitivity = metrics_score[2]
+        jaccard = metrics_score[0]
+        f1 = metrics_score[1]
+        recall = metrics_score[2]
         precision = metrics_score[3]
-        jaccard = metrics_score[4]
-        f1 = metrics_score[5]
-        print(f"\tAccuracy: {accuracy:1.4f} \n\tSpecificity: {specificity:1.4f} \n\tSensitivity: {sensitivity:1.4f} \n\tPrecision: {precision:1.4f} \n\tJaccard: {jaccard:1.4f}\n\tF1: {f1:1.4f}\n")
-#accuracy, specificity, sensitivity,precision, jaccard_index, F1_score
+        acc = metrics_score[4]
+        print(f"\tJaccard: {jaccard:1.4f} \n\tF1: {f1:1.4f} \n\tRecall: {recall:1.4f} \n\tPrecision: {precision:1.4f} \n\tAcc: {acc:1.4f}\n")
