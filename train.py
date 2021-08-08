@@ -67,7 +67,7 @@ def evaluate(model, loader, loss_fn, device):
             score = calculate_metrics(y, y_pred)
             metrics_score = list(map(add, metrics_score, score))
         epoch_loss = epoch_loss/len(loader)
-        metrics_score = list(map(sub, metrics_score, len(loader)))
+        metrics_score = [sc / len(loader) for sc in metrics_score]
     return epoch_loss, metrics_score
 
 if __name__ == "__main__":
