@@ -20,7 +20,7 @@ def load_data(train_path, test_path):
 
     return (train_x, train_y), (test_x, test_y)
 
-def augment_data(images, masks, save_path, augment=True):
+def augment_data(images, masks, save_path, augment=True, format="same"):
     size = (512, 512)
 
     for idx, (x, y) in tqdm(enumerate(zip(images, masks)), total=len(images)):
@@ -29,7 +29,7 @@ def augment_data(images, masks, save_path, augment=True):
 
    
         x = cv2.imread(x, cv2.IMREAD_COLOR)
-        if augment == True:
+        if format == "different":
           y = imageio.mimread(y)[0]
         else:
           y = cv2.imread(y, cv2.IMREAD_COLOR)
@@ -108,5 +108,5 @@ if __name__ == "__main__":
     create_dir("/content/drive/MyDrive/Program/new_data/test/mask/")
 
     """ Data augmentation """
-    augment_data(train_x, train_y, "/content/drive/MyDrive/Program/new_data/train/", augment=True)
-    augment_data(test_x, test_y, "/content/drive/MyDrive/Program/new_data/test/", augment=False)
+    augment_data(train_x, train_y, "/content/drive/MyDrive/Program/new_data/train/", augment=True, format="different")
+    augment_data(test_x, test_y, "/content/drive/MyDrive/Program/new_data/test/", augment=False, format="same")
