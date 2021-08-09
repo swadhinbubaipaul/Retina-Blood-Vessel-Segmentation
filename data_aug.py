@@ -11,12 +11,12 @@ def create_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
 
-def load_data(path):
-    train_x = sorted(glob(os.path.join(path, "training", "images", "*.tif")))
-    train_y = sorted(glob(os.path.join(path, "training", "1st_manual", "*.gif")))
+def load_data(train_path, test_path):
+    train_x = sorted(glob(os.path.join(train_path, "training", "images", "*.tif")))
+    train_y = sorted(glob(os.path.join(train_path, "training", "1st_manual", "*.gif")))
 
-    test_x = sorted(glob(os.path.join(path, "test", "images", "*.tif")))
-    test_y = sorted(glob(os.path.join(path, "test", "1st_manual", "*.gif")))
+    test_x = sorted(glob(os.path.join(test_path, "test", "images", "*.ppm")))
+    test_y = sorted(glob(os.path.join(test_path, "test", "1st_manual", "*.ppm")))
 
     return (train_x, train_y), (test_x, test_y)
 
@@ -91,8 +91,9 @@ if __name__ == "__main__":
     np.random.seed(42)
 
 
-    data_path = "/content/drive/MyDrive/Datasets/DRIVE"
-    (train_x, train_y), (test_x, test_y) = load_data(data_path)
+    train_data_path = "/content/drive/MyDrive/Datasets/DRIVE"
+    test_data_path = "/content/drive/MyDrive/Datasets/STARE"
+    (train_x, train_y), (test_x, test_y) = load_data(train_data_path, test_data_path)
 
     print(f"Train: {len(train_x)} - {len(train_y)}")
     print(f"Test: {len(test_x)} - {len(test_y)}")
