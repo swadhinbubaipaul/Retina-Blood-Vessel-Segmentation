@@ -29,7 +29,10 @@ def augment_data(images, masks, save_path, augment=True):
 
    
         x = cv2.imread(x, cv2.IMREAD_COLOR)
-        y = imageio.mimread(y)[0]
+        if augment == True:
+          y = imageio.mimread(y)[0]
+        else:
+          y = cv2.imread(y, cv2.IMREAD_COLOR)
 
         if augment == True:
             aug = HorizontalFlip(p=1.0)
