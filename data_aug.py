@@ -27,7 +27,7 @@ def augment_data(images, masks, save_path, augment=True):
         
         name = x.split("/")[-1].split(".")[0]
 
-        
+        print(idx)
         x = cv2.imread(x, cv2.IMREAD_COLOR)
         y = imageio.mimread(y)[0]
 
